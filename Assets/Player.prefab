@@ -53,7 +53,7 @@ MonoBehaviour:
   m_AirSpeed: 3
   m_DashSpeed: 5
   jumpForce: 14
-  IsGrounded: 1
+  IsGrounded: 0
   IsDead: 0
   SpawPoint: {x: 0, y: 0}
   Player: {fileID: 7879828177241400679}
