@@ -18,6 +18,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject Player;
     [SerializeField] private CinemachineCamera CinemaCamera;
     [SerializeField] private Animator anim;
+    [SerializeField]
+    private float Side;
+
+    Quaternion rot;
+    [SerializeField] private float turnSpeed;
 
     void Awake()
     {
@@ -28,34 +33,43 @@ public class PlayerController : MonoBehaviour
         jumpForce = 14;
         rb.bodyType = RigidbodyType2D.Dynamic;
         gameObject.tag = "Player";
+        anim.SetBool("Exit", false);
         StartCoroutine(WaitCamera());
     }
 
     void Update()
     {
         if (!IsDead)
-        {
-            if (IsGrounded)
+        { 
+            moveHorizontal = Input.GetAxis("Horizontal");
+            Move();
+            Vector2 move = new Vector2(moveHorizontal * m_NormalSpeed, rb.linearVelocityY);
+            rb.linearVelocity = move;
+            if (IsGrounded && Input.GetKeyDown(KeyCode.Space)) 
             {
-                m_Speed = m_NormalSpeed;
-            }
-            else
-            {
-                m_Speed = m_AirSpeed;
-            }
-            if (IsGrounded && Input.GetKeyDown(KeyCode.Space)) // Проверка на прыжок, только если игрок на земле
-            {
-                Debug.Log("ad");
                 Jump();
             }
-            Move();
+            
         }
     }
+    [SerializeField] private float moveHorizontal;
+    [SerializeField] private bool jump;
 
     void Move()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal"); // Получаем горизонтальное движение (A/D или Left/Right Arrow)
-                                                            // float moveVertical = Input.GetAxis("Vertical");     // Получаем вертикальное движение (W/S или Up/Down Arrow)
+        moveHorizontal = Input.GetAxis("Horizontal"); 
+
+        transform.rotation = Quaternion.Euler(0, 180, 0);
+
+
+        if (moveHorizontal < 0)
+            rot = Quaternion.Euler(0, 180, 0);
+        else if (moveHorizontal > 0)
+            rot = Quaternion.Euler(0, 0, 0);
+
+        transform.rotation = rot;
+
+        Vector2 movement = new Vector2(moveHorizontal, 0);                                            
 
         if (moveHorizontal != 0)
         {
@@ -63,24 +77,22 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            transform.rotation = rot;
             anim.SetBool("IsMoving", false);
         }
-
-        Vector2 movement = new Vector2(moveHorizontal, 0);
-
-   
-        rb.AddForce(movement * m_Speed, ForceMode2D.Force);
-
     }
     private void FixedUpdate()
     {
-        
+       
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground")
+        {
             IsGrounded = true;
+            jump = false;
+        }
     }
 
 
@@ -93,7 +105,8 @@ public class PlayerController : MonoBehaviour
     }
     void Jump()
     {
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // Прыгаем вверх
+        Vector2 move = new Vector2(rb.linearVelocityX, jumpForce);
+        rb.linearVelocity = move;
     }
 
     public void Dead()
@@ -105,7 +118,10 @@ public class PlayerController : MonoBehaviour
             jumpForce = 0;
             rb.bodyType = RigidbodyType2D.Static;
             gameObject.tag = "Ground";
+            anim.SetBool("Exit", true);
             CinemaCamera.Follow = Instantiate(Player, SpawPoint, Quaternion.identity).transform;
+            gameObject.GetComponent<PlayerController>().enabled = false;
+            anim.enabled = false;
         }
 
     }
@@ -121,5 +137,11 @@ public class PlayerController : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    protected IEnumerator WaitForAnimation(string animation)
+    {
+        yield return new WaitForEndOfFrame();
+        anim.SetBool(animation, false);
     }
 }
