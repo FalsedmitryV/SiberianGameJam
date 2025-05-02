@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector2 SpawPoint;
     [SerializeField] private GameObject Player;
     [SerializeField] private CinemachineCamera CinemaCamera;
+    [SerializeField] private Animator anim;
 
     void Awake()
     {
@@ -56,11 +57,14 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal"); // ѕолучаем горизонтальное движение (A/D или Left/Right Arrow)
                                                             // float moveVertical = Input.GetAxis("Vertical");     // ѕолучаем вертикальное движение (W/S или Up/Down Arrow)
 
-        if (moveHorizontal > 0)
-            spriteRenderer.flipX = false;
-        else if (moveHorizontal < 0)
-            spriteRenderer.flipX = true;
-
+        if (moveHorizontal != 0)
+        {
+            anim.SetBool("IsMoving", true);
+        }
+        else
+        {
+            anim.SetBool("IsMoving", false);
+        }
 
         Vector2 movement = new Vector2(moveHorizontal, 0);
 
