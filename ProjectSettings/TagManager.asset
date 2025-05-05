@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Bullet
+  - CameraConfiner
+  - Saw
   layers:
   - Default
   - TransparentFX

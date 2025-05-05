@@ -76,8 +76,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -5333349321414413341, guid: 98d0c238858d7ef4e9e519af28f9f96b, type: 3}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: -2486049323738938496, guid: e1a3e2b823372d0449ea0a90f8b04785, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,3 +103,5 @@ MonoBehaviour:
   Bullet: {fileID: 8495480723397020431, guid: 2c20c126595e6e34aaee35694bb725be, type: 3}
   delay: 1
   direction: {x: 0, y: 0}
+  source: {fileID: 0}
+  clip: {fileID: 0}

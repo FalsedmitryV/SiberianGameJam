@@ -7,6 +7,7 @@ public class FireStation : MonoBehaviour
     [SerializeField] private float delay;
     [SerializeField] private Vector2 direction;
 
+
     private void Awake()
     {
         StartCoroutine(SpawnBullet());

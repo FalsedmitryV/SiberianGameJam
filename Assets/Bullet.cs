@@ -27,8 +27,9 @@ public class Bullet : MonoBehaviour
         {
             collision.gameObject.GetComponent<PlayerController>().Dead();
         }
-        if(collision.tag != "Bullet")
-        Destroy(gameObject);
+
+        if(collision.tag != "Bullet" && collision.tag != "CameraConfiner" && collision.tag != "Saw")
+            Destroy(gameObject);
     }
     
     IEnumerator BulletDestroy()
